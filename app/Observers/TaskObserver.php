@@ -8,6 +8,8 @@ class TaskObserver
 {
     public function creating(Task $task)
     {
-        $task->user_id = auth()->id();
+        if ($task->user_id == null) {
+            $task->user_id = auth()->id();
+        }
     }
 }

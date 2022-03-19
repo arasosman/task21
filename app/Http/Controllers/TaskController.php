@@ -3,10 +3,11 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\TaskStoreRequest;
+use App\Http\Requests\TaskUpdateRequest;
 use App\Http\Resources\TaskResource;
 use App\Http\Services\TaskService;
+use App\Models\Task;
 use Illuminate\Http\JsonResponse;
-use Illuminate\Http\Request;
 
 class TaskController extends Controller
 {
@@ -16,6 +17,7 @@ class TaskController extends Controller
     {
         $this->taskService = $taskService;
     }
+
     /**
      * Display a listing of the resource.
      *
@@ -36,40 +38,46 @@ class TaskController extends Controller
     public function store(TaskStoreRequest $request): JsonResponse
     {
         return TaskResource::make($this->taskService->create($request->validated()))
-            ->response();
+            ->response()
+            ->setStatusCode(201);
     }
 
     /**
      * Display the specified resource.
      *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
+     * @param Task $task
+     * @return JsonResponse
      */
-    public function show($id)
+    public function show(Task $task): JsonResponse
     {
-        //
+        return TaskResource::make($task)
+            ->response();
     }
 
     /**
      * Update the specified resource in storage.
      *
-     * @param Request $request
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
+     * @param TaskUpdateRequest $request
+     * @param Task $task
+     * @return JsonResponse
      */
-    public function update(Request $request, $id)
+    public function update(TaskUpdateRequest $request, Task $task): JsonResponse
     {
-        //
+        return TaskResource::make($this->taskService->update($task, $request->validated()))
+            ->response();
     }
 
     /**
      * Remove the specified resource from storage.
      *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
+     * @param Task $task
+     * @return JsonResponse
      */
-    public function destroy($id)
+    public function destroy(Task $task): JsonResponse
     {
-        //
+        $this->taskService->delete($task);
+
+        return TaskResource::make($task)
+            ->response();
     }
 }

@@ -18,4 +18,14 @@ class EloquentTaskRepository implements TaskRepositoryContract
     {
         return Task::query()->create($validated);
     }
+
+    public function update(Task $task, array $validated): bool
+    {
+        return $task->update($validated);
+    }
+
+    public function delete(Task $task): ?bool
+    {
+        return $task->delete();
+    }
 }
