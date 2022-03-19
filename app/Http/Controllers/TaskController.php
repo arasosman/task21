@@ -2,10 +2,17 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Services\TaskService;
 use Illuminate\Http\Request;
 
 class TaskController extends Controller
 {
+    private TaskService $taskService;
+
+    public function __construct(TaskService $taskService)
+    {
+        $this->taskService = $taskService;
+    }
     /**
      * Display a listing of the resource.
      *
